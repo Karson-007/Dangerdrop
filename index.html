@@ -17,10 +17,21 @@
   <div class="io-corner tr"></div>
   <div class="io-corner bl"></div>
   <div class="io-corner br"></div>
-  <div class="io-center">
+
+  <!-- 皮特托小人坠落
+       替换图片：把下面 div#ioPiktoImg 换成 <img src="你的图片.png"> 即可
+       建议图片尺寸：正方形，PNG 透明背景，100~160px 显示宽度 -->
+  <div id="ioPiktoWrap">
+    <div id="ioPiktoImg">
+      <!-- 有图片时替换这里：<img src="pikto.png" alt=""> -->
+      <img src="pictogram.png" alt="">
+    </div>
+  </div>
+
+  <div class="io-center" id="ioCenterBlock">
     <div class="io-eyebrow">Creative Circle &nbsp;·&nbsp; Nagano, Japan</div>
     <div class="io-title-wrap">
-      <svg id="ioPixelTitle" viewBox="0 0 0 56" height="56" style="display:block;overflow:visible;" xmlns="http://www.w3.org/2000/svg"></svg>
+      <svg id="ioPixelTitle" xmlns="http://www.w3.org/2000/svg" style="display:block;overflow:visible;"></svg>
     </div>
     <div class="io-divider"></div>
     <div class="io-sub">ARQISAT &nbsp;·&nbsp; Character Design &nbsp;·&nbsp; KV<span class="io-blink"></span></div>
@@ -81,7 +92,7 @@
             ドールズフロントライン | <a href="https://x.com/GirlsFrontline/status/1181856887173599232">M200</a> / <a href="https://x.com/GirlsFrontline/status/1610941184880562177">MG338</a><br>
             Fate / Grand Order | <a href="https://news.fate-go.jp/2020/imaginary_scramble_pu/">ネモ</a> / <a href="https://news.fate-go.jp/2023/christmas2023/">ネモ〔サンタ〕</a><br>
             Wonder Festival | <a href="https://kaiyodo.co.jp/items/wonderfestival/wonda-chan4/">[ワンダちゃんNEXT DOOR プロジェクト] FILE:04 DANGERDROPVer.</a><br>など</p>
-            <p>CONTACT : <a href="/cdn-cgi/l/email-protection#c6a2a7a8a1a3b4a2b4a9b6e8afa8a0a986a1aba7afaae8a5a9ab"><span class="__cf_email__" data-cfemail="d0b4b1beb7b5a2b4a2bfa0feb9beb6bf90b7bdb1b9bcfeb3bfbd">[email&#160;protected]</span></a><br>
+            <p>CONTACT : <a href="mailto:dangerdrop.info@gmail.com">dangerdrop.info@gmail.com</a><br>
             ※イラスト制作のご依頼は 2027年 1月 以降に着手できるものだと助かります。<br>
             ※現在は法人様のみご依頼をお受けしております。</p>
           </div>
@@ -101,7 +112,13 @@
     <section class="page" id="page-gallery">
       <div class="gallery-meta">
         <div class="gallery-heading">Works</div>
-        <div class="gallery-count" id="galleryCount"></div>
+        <div class="gallery-meta-right">
+          <div class="gallery-count" id="galleryCount"></div>
+          <button id="sortBtn" class="sort-btn" title="切换排序">
+            <span class="sort-icon">↑</span>
+            <span class="sort-label">ASC</span>
+          </button>
+        </div>
       </div>
       <div class="gallery-wrap">
         <div class="gallery-list" id="galleryItems"></div>
