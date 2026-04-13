@@ -22,6 +22,90 @@
 }
 body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh}
 
+/* ── Intro Overlay ── */
+#intro-overlay{
+  position:fixed;inset:0;
+  background:#181e24;
+  z-index:9999;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  cursor:pointer;overflow:hidden;
+  transition:opacity 0.9s ease;
+}
+#intro-overlay.out{opacity:0;pointer-events:none;}
+.io-scan{
+  position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 0%,rgba(170,200,220,0.15) 40%,rgba(170,200,220,0.3) 50%,rgba(170,200,220,0.15) 60%,transparent 100%);
+  top:-2px;
+  animation:ioScan 2.2s cubic-bezier(0.4,0,0.6,1) 0.2s 1 forwards;
+  opacity:0;
+}
+@keyframes ioScan{0%{top:0%;opacity:1}100%{top:100%;opacity:0.3}}
+.io-crt{
+  position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);
+}
+.io-corner{position:absolute;width:14px;height:14px;opacity:0;animation:ioFade 0.4s ease 1.1s forwards;}
+.io-corner.tl{top:24px;left:24px;border-top:1px solid rgba(150,180,200,0.2);border-left:1px solid rgba(150,180,200,0.2);}
+.io-corner.tr{top:24px;right:24px;border-top:1px solid rgba(150,180,200,0.2);border-right:1px solid rgba(150,180,200,0.2);}
+.io-corner.bl{bottom:24px;left:24px;border-bottom:1px solid rgba(150,180,200,0.2);border-left:1px solid rgba(150,180,200,0.2);}
+.io-corner.br{bottom:24px;right:24px;border-bottom:1px solid rgba(150,180,200,0.2);border-right:1px solid rgba(150,180,200,0.2);}
+.io-center{display:flex;flex-direction:column;align-items:center;position:relative;z-index:2;}
+.io-eyebrow{
+  font-family:'Courier New',Courier,monospace;
+  font-size:10px;letter-spacing:0.32em;
+  color:rgba(150,180,200,0.38);text-transform:uppercase;
+  margin-bottom:20px;opacity:0;
+  animation:ioUp 0.5s ease 0.9s forwards;
+}
+.io-title-wrap{opacity:0;animation:ioFade 0.4s ease 1.3s forwards;}
+.io-divider{
+  height:1px;background:rgba(150,180,200,0.2);
+  width:0%;margin:12px auto 16px;
+  animation:ioLine 0.7s ease 1.65s forwards;
+}
+@keyframes ioLine{to{width:100%;}}
+.io-sub{
+  font-family:'Courier New',Courier,monospace;
+  font-size:10px;letter-spacing:0.26em;
+  color:rgba(130,165,190,0.5);text-transform:uppercase;
+  opacity:0;animation:ioUp 0.5s ease 2.0s forwards;
+}
+.io-year{
+  font-family:'Courier New',Courier,monospace;
+  font-size:10px;letter-spacing:0.2em;
+  color:rgba(110,145,170,0.28);margin-top:8px;
+  opacity:0;animation:ioUp 0.4s ease 2.3s forwards;
+}
+.io-progress{margin-top:38px;width:200px;opacity:0;animation:ioFade 0.3s ease 2.6s forwards;}
+.io-plabel{
+  font-family:'Courier New',Courier,monospace;
+  font-size:9px;letter-spacing:0.16em;
+  color:rgba(130,165,190,0.3);text-transform:uppercase;
+  display:flex;justify-content:space-between;margin-bottom:5px;
+}
+.io-track{width:100%;height:2px;background:rgba(150,180,200,0.1);position:relative;}
+.io-fill{position:absolute;left:0;top:0;bottom:0;width:0%;background:rgba(150,185,210,0.45);animation:ioBar 1.4s steps(28,end) 2.8s forwards;}
+.io-cur{position:absolute;top:-3px;width:2px;height:8px;background:rgba(150,185,210,0.7);left:0%;animation:ioCur 1.4s steps(28,end) 2.8s forwards;}
+@keyframes ioBar{to{width:100%;}}
+@keyframes ioCur{to{left:calc(100% - 2px);}}
+.io-blink{
+  display:inline-block;width:2px;height:22px;
+  background:rgba(150,185,210,0.6);
+  margin-left:3px;vertical-align:middle;
+  opacity:0;animation:ioBlink 0.85s step-end infinite 3.0s;
+}
+@keyframes ioBlink{0%,100%{opacity:0}50%{opacity:1}}
+.io-hint{
+  position:absolute;bottom:24px;
+  font-family:'Courier New',Courier,monospace;
+  font-size:9px;letter-spacing:0.22em;
+  color:rgba(130,165,190,0.22);text-transform:uppercase;
+  opacity:0;animation:ioFade 0.5s ease 4.0s forwards;
+}
+@keyframes ioFade{to{opacity:1;}}
+@keyframes ioUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
 /* ── Sidebar ── */
 #sidebar{width:var(--sw);min-height:100vh;background:var(--sidebar);display:flex;flex-direction:column;position:fixed;left:0;top:0;z-index:100;transition:transform var(--tr)}
 body.closed #sidebar{transform:translateX(calc(-1 * var(--sw)))}
@@ -46,8 +130,8 @@ body.closed #toggleBtn{left:6px;color:var(--text-sub)}
 body.closed #main{margin-left:0}
 
 /* ── Header ── */
-.site-header{width:100%;max-width:calc(var(--col) + 80px);padding:52px 40px 0;display:flex;flex-direction:column;gap:28px}
-.header-top{display:flex;align-items:center;gap:18px}
+.site-header{width:100%;max-width:calc(var(--col) + 80px);padding:24px 40px 0;display:flex;flex-direction:column;gap:20px}
+.header-top{display:flex;align-items:center;gap:18px;padding-top:20px}
 .logo-block{flex-shrink:0;width:100px;height:100px;overflow:hidden}
 .logo-block img{width:100%;height:100%;object-fit:contain}
 .site-title{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;letter-spacing:0.15em;color:var(--text);line-height:1}
@@ -56,12 +140,13 @@ body.closed #main{margin-left:0}
 .header-banner img{width:100%;height:100%;object-fit:cover}
 .header-divider{border:none;border-top:1px solid var(--border);width:100%;max-width:calc(var(--col) + 80px);margin-top:24px}
 
-/* ── img-slot (placeholder、画像がない場所) ── */
+/* ── img-slot ── */
 .img-slot{background:#e4e6ea;border:1.5px dashed #b0b8c4;display:flex;align-items:center;justify-content:center;color:#a0aab4;font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;width:100%;height:100%}
 
 /* ── Pages ── */
-.page{display:none;width:100%;max-width:calc(var(--col) + 80px);padding:52px 40px 80px}
-.page.active{display:block}
+.page{display:none;width:100%;max-width:calc(var(--col) + 80px);padding:52px 40px 80px;opacity:0;transition:opacity 0.25s ease;}
+.page.active{display:block;}
+.page.visible{opacity:1;}
 
 /* ── About ── */
 .about-wrap{display:grid;grid-template-columns:1fr 170px;gap:52px;align-items:start}
@@ -76,10 +161,17 @@ body.closed #main{margin-left:0}
 .about-img-wrap img{width:100%;height:100%;object-fit:cover}
 .about-copyright{margin-top:36px;padding-top:18px;border-top:1px solid var(--border);font-size:0.67rem;color:#9aabb8;line-height:1.85;font-family:'Space Mono',monospace;letter-spacing:0.02em}
 
-/* ── Gallery (list / log) ── */
+/* ── Gallery ── */
 .gallery-meta{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px}
 .gallery-heading{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.22em;color:var(--text-sub);text-transform:uppercase}
 .gallery-count{font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--border)}
+.gallery-wrap{display:flex;gap:0}
+.gallery-list{flex:1;min-width:0}
+.gallery-timeline{width:52px;flex-shrink:0;position:relative;margin-left:24px;}
+.tl-line{position:absolute;top:0;bottom:0;left:10px;width:1px;background:var(--border);}
+.tl-year{position:absolute;left:0;font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--text-sub);letter-spacing:0.08em;writing-mode:vertical-rl;text-orientation:mixed;padding-left:22px;line-height:1;white-space:nowrap;}
+.tl-year::before{content:'';position:absolute;left:7px;top:0;width:7px;height:7px;border-radius:50%;background:var(--border);}
+.tl-year.first::before{background:var(--accent);}
 .gallery-entry{border-top:1px solid var(--border);padding:20px 0 28px}
 .gallery-entry:last-child{border-bottom:1px solid var(--border)}
 .entry-date{font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--text-sub);letter-spacing:0.1em;text-align:right;margin-bottom:10px}
@@ -133,6 +225,30 @@ body.closed #main{margin-left:0}
 </head>
 <body>
 
+<!-- ── Intro Overlay ── -->
+<div id="intro-overlay">
+  <div class="io-scan"></div>
+  <div class="io-crt"></div>
+  <div class="io-corner tl"></div>
+  <div class="io-corner tr"></div>
+  <div class="io-corner bl"></div>
+  <div class="io-corner br"></div>
+  <div class="io-center">
+    <div class="io-eyebrow">Creative Circle &nbsp;·&nbsp; Nagano, Japan</div>
+    <div class="io-title-wrap">
+      <svg id="ioPixelTitle" viewBox="0 0 0 56" height="56" style="display:block;overflow:visible;" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="io-divider"></div>
+    <div class="io-sub">ARQISAT &nbsp;·&nbsp; Character Design &nbsp;·&nbsp; KV<span class="io-blink"></span></div>
+    <div class="io-year">Est. 2014</div>
+    <div class="io-progress">
+      <div class="io-plabel"><span>Initializing</span><span id="ioPct">0%</span></div>
+      <div class="io-track"><div class="io-fill"></div><div class="io-cur"></div></div>
+    </div>
+  </div>
+  <div class="io-hint">Click anywhere to enter &nbsp;_</div>
+</div>
+
 <button id="toggleBtn">&#9664;</button>
 
 <div id="app">
@@ -147,7 +263,6 @@ body.closed #main{margin-left:0}
       <div class="nav-link" data-page="links">Links</div>
     </nav>
     <div class="sidebar-art">
-      <!-- sidebar装饰图 → 替换 sidebar-art.jpg -->
       <img src="sidebar-art.jpg" alt="">
     </div>
   </aside>
@@ -156,7 +271,6 @@ body.closed #main{margin-left:0}
     <header class="site-header">
       <div class="header-top">
         <div class="logo-block">
-          <!-- logo → 替换 logo.png -->
           <img src="logo.png" alt="DANGERDROP">
         </div>
         <div>
@@ -165,7 +279,6 @@ body.closed #main{margin-left:0}
         </div>
       </div>
       <div class="header-banner">
-        <!-- 横幅banner → 替换 banner.jpg -->
         <img src="banner.jpg" alt="">
       </div>
     </header>
@@ -184,7 +297,7 @@ body.closed #main{margin-left:0}
             ドールズフロントライン | <a href="https://x.com/GirlsFrontline/status/1181856887173599232">M200</a> / <a href="https://x.com/GirlsFrontline/status/1610941184880562177">MG338</a><br>
             Fate / Grand Order | <a href="https://news.fate-go.jp/2020/imaginary_scramble_pu/">ネモ</a> / <a href="https://news.fate-go.jp/2023/christmas2023/">ネモ〔サンタ〕</a><br>
             Wonder Festival | <a href="https://kaiyodo.co.jp/items/wonderfestival/wonda-chan4/">[ワンダちゃんNEXT DOOR プロジェクト] FILE:04 DANGERDROPVer.</a><br>など</p>
-            <p>CONTACT : <a href="/cdn-cgi/l/email-protection#eb8f8a858c8e998f99849bc582858d84ab8c868a8287c5888486"><span class="__cf_email__" data-cfemail="6004010e07051204120f104e090e060f20070d01090c4e030f0d">[email&#160;protected]</span></a><br>
+            <p>CONTACT : <a href="mailto:dangerdrop.info@gmail.com">dangerdrop.info@gmail.com</a><br>
             ※イラスト制作のご依頼は 2027年 1月 以降に着手できるものだと助かります。<br>
             ※現在は法人様のみご依頼をお受けしております。</p>
           </div>
@@ -195,7 +308,6 @@ body.closed #main{margin-left:0}
           </div>
         </div>
         <div class="about-img-wrap">
-          <!-- About右侧角色图 → 替换 about-chara.jpg -->
           <img src="about-chara.jpg" alt="">
         </div>
       </div>
@@ -207,7 +319,12 @@ body.closed #main{margin-left:0}
         <div class="gallery-heading">Works</div>
         <div class="gallery-count" id="galleryCount"></div>
       </div>
-      <div id="galleryItems"></div>
+      <div class="gallery-wrap">
+        <div class="gallery-list" id="galleryItems"></div>
+        <div class="gallery-timeline" id="galleryTimeline">
+          <div class="tl-line"></div>
+        </div>
+      </div>
     </section>
 
     <!-- Links -->
@@ -292,45 +409,172 @@ body.closed #main{margin-left:0}
 
 <script>
 (function(){
+  // ── Intro pixel title ──
+  var glyphs = {
+    'D':[0x7F,0x41,0x41,0x41,0x3E],
+    'A':[0x7F,0x09,0x09,0x09,0x7F],
+    'N':[0x7F,0x02,0x04,0x08,0x7F],
+    'G':[0x3E,0x41,0x49,0x49,0x3A],
+    'E':[0x7F,0x49,0x49,0x49,0x41],
+    'R':[0x7F,0x09,0x19,0x29,0x46],
+    'O':[0x3E,0x41,0x41,0x41,0x3E],
+    'P':[0x7F,0x09,0x09,0x09,0x06]
+  };
+  var text='DANGERDROP', cell=7, gap=1, lGap=10, rows=7, cols=5;
+  var color='rgba(185,210,228,0.88)';
+  var svg=document.getElementById('ioPixelTitle');
+  var totalW=0;
+  for(var k=0;k<text.length;k++) totalW+=cols*(cell+gap)-gap+lGap;
+  totalW-=lGap;
+  svg.setAttribute('viewBox','0 0 '+totalW+' '+(rows*(cell+gap)-gap));
+  svg.setAttribute('width',totalW);
+  svg.setAttribute('height',rows*(cell+gap)-gap);
+  var x=0;
+  for(var i=0;i<text.length;i++){
+    var bitmap=glyphs[text[i]]||glyphs['E'];
+    for(var c=0;c<cols;c++){
+      for(var r=0;r<rows;r++){
+        if((bitmap[c]>>r)&1){
+          var rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
+          rect.setAttribute('x',x+c*(cell+gap));
+          rect.setAttribute('y',r*(cell+gap));
+          rect.setAttribute('width',cell);
+          rect.setAttribute('height',cell);
+          rect.setAttribute('fill',color);
+          rect.setAttribute('rx','0');
+          svg.appendChild(rect);
+        }
+      }
+    }
+    x+=cols*(cell+gap)-gap+lGap;
+  }
+
+  // ── Intro dismiss ──
+  var overlay=document.getElementById('intro-overlay');
+  var pctEl=document.getElementById('ioPct');
+  var count=0;
+  var pctTimer=setInterval(function(){
+    if(count>=100){clearInterval(pctTimer);return;}
+    count+=Math.ceil(Math.random()*6);
+    if(count>100)count=100;
+    if(pctEl)pctEl.textContent=count+'%';
+  },70);
+  function dismissIntro(){
+    overlay.classList.add('out');
+    clearInterval(pctTimer);
+    setTimeout(function(){overlay.style.display='none';},950);
+  }
+  overlay.addEventListener('click',dismissIntro);
+  setTimeout(dismissIntro,5000);
+
+  // ── Initial page fade in ──
+  var initialPage = document.querySelector('.page.active');
+  if(initialPage){
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        initialPage.classList.add('visible');
+      });
+    });
+  }
+
+  // ── Gallery ──
   var works = [
-    { date:'2016/1',  title:'Port',                                      img:'work-01.jpg' },
-    { date:'2016/3',  title:'U620',                                      img:'work-02.jpg' },
-    { date:'2016/5',  title:'Bayside',                                   img:'work-03.jpg' },
-    { date:'2017/2',  title:'994F',                                      img:'work-04.jpg' },
-    { date:'2017/8',  title:'Junttan PMX22 / Pile Driving Rig (Finland)',img:'work-05.jpg' }
+    { date:'2016/1',  year:'2016', title:'Port',                                       img:'work-01.jpg' },
+    { date:'2016/3',  year:'2016', title:'U620',                                       img:'work-02.jpg' },
+    { date:'2016/5',  year:'2016', title:'Bayside',                                    img:'work-03.jpg' },
+    { date:'2017/2',  year:'2017', title:'994F',                                       img:'work-04.jpg' },
+    { date:'2017/8',  year:'2017', title:'Junttan PMX22 / Pile Driving Rig (Finland)', img:'work-05.jpg' }
   ];
 
-  var container = document.getElementById('galleryItems');
+  var container   = document.getElementById('galleryItems');
+  var tlContainer = document.getElementById('galleryTimeline');
   document.getElementById('galleryCount').textContent = works.length + ' works';
+
+  var seenYears  = {};
+  var yearLabels = {};
 
   works.forEach(function(w, i){
     var entry = document.createElement('div');
     entry.className = 'gallery-entry';
+    entry.setAttribute('data-year', w.year);
     entry.innerHTML =
       '<div class="entry-date">' + w.date + '</div>' +
       '<div class="entry-img"><img src="' + w.img + '" alt="' + w.title + '"></div>' +
       '<div class="entry-title">' + w.title + '</div>';
     container.appendChild(entry);
     entry.querySelector('.entry-img').addEventListener('click', function(){ openLB(i); });
+
+    if(!seenYears[w.year]){
+      seenYears[w.year] = true;
+      var yl = document.createElement('div');
+      yl.className = 'tl-year' + (Object.keys(seenYears).length === 1 ? ' first' : '');
+      yl.textContent = w.year;
+      tlContainer.appendChild(yl);
+      yearLabels[w.year] = yl;
+    }
   });
 
+  function alignTimeline(){
+    var wrapTop = container.getBoundingClientRect().top + window.scrollY;
+    Object.keys(yearLabels).forEach(function(year){
+      var firstEntry = container.querySelector('[data-year="' + year + '"]');
+      if(firstEntry){
+        var entryTop = firstEntry.getBoundingClientRect().top + window.scrollY - wrapTop;
+        yearLabels[year].style.top = entryTop + 'px';
+      }
+    });
+  }
+
+  window.addEventListener('load', alignTimeline);
+  window.addEventListener('resize', alignTimeline);
+  setTimeout(alignTimeline, 100);
+  setTimeout(alignTimeline, 500);
+  container.querySelectorAll('img').forEach(function(img){
+    img.addEventListener('load', alignTimeline);
+  });
+
+  // ── Sidebar toggle ──
   var toggleBtn = document.getElementById('toggleBtn');
   toggleBtn.addEventListener('click', function(){
     var closed = document.body.classList.toggle('closed');
     toggleBtn.innerHTML = closed ? '&#9654;' : '&#9664;';
   });
 
+  // ── Nav with page fade transition ──
   var navLinks = document.querySelectorAll('.nav-link');
   navLinks.forEach(function(link){
     link.addEventListener('click', function(){
+      var current = document.querySelector('.page.active');
+      var target = document.getElementById('page-' + link.dataset.page);
+      if(!target || target === current) return;
+
       navLinks.forEach(function(l){ l.classList.remove('active'); });
-      document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
       link.classList.add('active');
-      var page = document.getElementById('page-' + link.dataset.page);
-      if(page) page.classList.add('active');
+
+      if(current){
+        current.classList.remove('visible');
+        setTimeout(function(){
+          current.classList.remove('active');
+          target.classList.add('active');
+          requestAnimationFrame(function(){
+            requestAnimationFrame(function(){
+              target.classList.add('visible');
+              if(link.dataset.page === 'gallery') setTimeout(alignTimeline, 50);
+            });
+          });
+        }, 220);
+      } else {
+        target.classList.add('active');
+        requestAnimationFrame(function(){
+          requestAnimationFrame(function(){
+            target.classList.add('visible');
+          });
+        });
+      }
     });
   });
 
+  // ── Lightbox ──
   var cur = 0;
   var lb  = document.getElementById('lightbox');
 
