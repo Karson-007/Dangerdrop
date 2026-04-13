@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DANGERDROP</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── Intro Overlay ── -->
+<div id="intro-overlay">
+  <div class="io-scan"></div>
+  <div class="io-crt"></div>
+  <div class="io-corner tl"></div>
+  <div class="io-corner tr"></div>
+  <div class="io-corner bl"></div>
+  <div class="io-corner br"></div>
+  <div class="io-center">
+    <div class="io-eyebrow">Creative Circle &nbsp;·&nbsp; Nagano, Japan</div>
+    <div class="io-title-wrap">
+      <svg id="ioPixelTitle" viewBox="0 0 0 56" height="56" style="display:block;overflow:visible;" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="io-divider"></div>
+    <div class="io-sub">ARQISAT &nbsp;·&nbsp; Character Design &nbsp;·&nbsp; KV<span class="io-blink"></span></div>
+    <div class="io-year">Est. 2014</div>
+    <div class="io-progress">
+      <div class="io-plabel"><span>Initializing</span><span id="ioPct">0%</span></div>
+      <div class="io-track"><div class="io-fill"></div><div class="io-cur"></div></div>
+    </div>
+  </div>
+  <div class="io-hint">Click anywhere to enter &nbsp;_</div>
+</div>
+
+<button id="toggleBtn">&#9664;</button>
+
+<div id="app">
+  <aside id="sidebar">
+    <div class="sidebar-brand">
+      Dangerdrop
+      <span>ARQISAT</span>
+    </div>
+    <nav class="nav-links">
+      <div class="nav-link active" data-page="about">About</div>
+      <div class="nav-link" data-page="gallery">Gallery</div>
+      <div class="nav-link" data-page="links">Links</div>
+    </nav>
+    <div class="sidebar-art">
+      <img src="sidebar-art.jpg" alt="">
+    </div>
+  </aside>
+
+  <main id="main">
+    <header class="site-header">
+      <div class="header-top">
+        <div class="logo-block">
+          <img src="logo.png" alt="DANGERDROP">
+        </div>
+        <div>
+          <div class="site-title">Dangerdrop</div>
+          <div class="site-tagline">Character design · Environment · KV</div>
+        </div>
+      </div>
+      <div class="header-banner">
+        <img src="banner.jpg" alt="">
+      </div>
+    </header>
+    <hr class="header-divider">
+
+    <!-- About -->
+    <section class="page active" id="page-about">
+      <div class="about-wrap">
+        <div>
+          <div class="about-label">Illustrator</div>
+          <div class="about-name">ARQISAT</div>
+          <div class="about-sub">from DANGERDROP</div>
+          <div class="about-body">
+            <p>DANGERDROP は2014年より日本は長野県を拠点に活動するクリエイティブサークルです。<br>代表のイラストレータ ASTG は2021年から PN を ARQISAT へ変更</p>
+            <p><strong>近年の活動</strong><br>
+            ドールズフロントライン | <a href="https://x.com/GirlsFrontline/status/1181856887173599232">M200</a> / <a href="https://x.com/GirlsFrontline/status/1610941184880562177">MG338</a><br>
+            Fate / Grand Order | <a href="https://news.fate-go.jp/2020/imaginary_scramble_pu/">ネモ</a> / <a href="https://news.fate-go.jp/2023/christmas2023/">ネモ〔サンタ〕</a><br>
+            Wonder Festival | <a href="https://kaiyodo.co.jp/items/wonderfestival/wonda-chan4/">[ワンダちゃんNEXT DOOR プロジェクト] FILE:04 DANGERDROPVer.</a><br>など</p>
+            <p>CONTACT : <a href="/cdn-cgi/l/email-protection#c6a2a7a8a1a3b4a2b4a9b6e8afa8a0a986a1aba7afaae8a5a9ab"><span class="__cf_email__" data-cfemail="d0b4b1beb7b5a2b4a2bfa0feb9beb6bf90b7bdb1b9bcfeb3bfbd">[email&#160;protected]</span></a><br>
+            ※イラスト制作のご依頼は 2027年 1月 以降に着手できるものだと助かります。<br>
+            ※現在は法人様のみご依頼をお受けしております。</p>
+          </div>
+          <div class="about-copyright">
+            Copyright 2007-2026 © dangerdrop. All rights reserved.<br>
+            DO NOT USE, REPRINT, UPLOAD ANY OF MY WORKS WITHOUT PERMISSION.<br>
+            Unauthorized duplication &amp; distribution is strictly prohibited.
+          </div>
+        </div>
+        <div class="about-img-wrap">
+          <img src="about-chara.jpg" alt="">
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="page" id="page-gallery">
+      <div class="gallery-meta">
+        <div class="gallery-heading">Works</div>
+        <div class="gallery-count" id="galleryCount"></div>
+      </div>
+      <div class="gallery-wrap">
+        <div class="gallery-list" id="galleryItems"></div>
+        <div class="gallery-timeline" id="galleryTimeline">
+          <div class="tl-line"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Links -->
+    <section class="page" id="page-links">
+      <div class="links-block">
+        <div class="links-heading">Active Platforms</div>
+        <div class="links-group">
+          <a class="link-item" href="https://dangerdrop.tumblr.com/" target="_blank">tumblr (home)</a>
+          <a class="link-item" href="https://bsky.app/profile/dangerdrop.bsky.social" target="_blank">Bluesky</a>
+          <a class="link-item" href="https://instagram.com/dangerdrop/" target="_blank">instagram</a>
+          <a class="link-item" href="http://www.pixiv.net/member.php?id=341407" target="_blank">pixiv</a>
+          <a class="link-item" href="https://dangerdrop.booth.pm/" target="_blank">BOOTH</a>
+          <a class="link-item" href="http://twitter.com/dangerdrop" target="_blank">twitter</a>
+          <a class="link-item" href="http://twitter.com/ARQISAT" target="_blank">twitter (sub)</a>
+          <a class="link-item" href="https://dangerdrop.fanbox.cc/" target="_blank">pixivFANBOX</a>
+          <a class="link-item" href="https://poipiku.com/yourID/" target="_blank">poipiku</a>
+        </div>
+      </div>
+      <div class="links-block">
+        <div class="links-notice">No new posts will be made</div>
+        <div class="links-group links-inactive">
+          <a class="link-item" href="https://www.threads.net/@dangerdrop" target="_blank">Threads</a>
+          <a class="link-item" href="https://pawoo.net/@yourname" target="_blank">Mastodon(Pawoo)</a>
+          <a class="link-item" href="https://www.tinami.com/creator/profile/yourID" target="_blank">Tinami</a>
+          <a class="link-item" href="https://www.artstation.com/yourname" target="_blank">ArtStation</a>
+          <a class="link-item" href="https://www.deviantart.com/yourname" target="_blank">DeviantArt</a>
+          <a class="link-item" href="https://seiga.nicovideo.jp/user/illust/yourID" target="_blank">Niconico Seiga</a>
+          <a class="link-item" href="https://www.flickr.com/photos/yourname" target="_blank">Flickr</a>
+          <a class="link-item" href="https://www.youtube.com/@yourname" target="_blank">YouTube</a>
+          <a class="link-item" href="https://soundcloud.com/yourname" target="_blank">soundcloud</a>
+        </div>
+      </div>
+      <div class="links-warning">
+        The above list is the platform I created my account on.<br>
+        If you see my name or posts on platforms other than this list, it is most likely a fake account or unauthorized reproduction.
+      </div>
+
+      <div class="ship-label-section">
+        <div class="ship-label-heading">Goods &amp; Merchandise</div>
+        <div class="ship-label">
+          <div class="sl-top">
+            <div class="sl-logo">LO<br>GO</div>
+            <div class="sl-addr">
+              <div style="font-size:0.44rem;color:#888;">TO:</div>
+              <div style="font-weight:700;">COMPANY NAME</div>
+              <div style="color:#555;">Address, City</div>
+              <div style="color:#555;">ZIP, State</div>
+              <div class="sl-priority">PRIORITY MAIL</div>
+            </div>
+          </div>
+          <div class="sl-from"><span style="color:#888;font-size:0.44rem;">FROM: </span><span style="font-weight:700;">COMPANY NAME</span><br><span style="color:#555;padding-left:34px;">Address, City, ZIP, State</span></div>
+          <div class="sl-fields">
+            <div class="sl-field"><div class="sl-lbl">ORDER NR: 000000/2020</div><div class="sl-bar"></div></div>
+            <div class="sl-field"><div class="sl-lbl">LOT NUMBER:</div></div>
+            <div class="sl-field"><div class="sl-lbl">ITEM NR: 000000/2020</div></div>
+            <div class="sl-field"><div class="sl-lbl">SHIP DATE:</div></div>
+            <div class="sl-field" style="grid-column:1/-1;border-bottom:none;"><div class="sl-lbl">WEIGHT:</div></div>
+          </div>
+          <div class="sl-foot">
+            <span style="font-size:0.9rem;">&#9854;</span>
+            <span style="font-size:1rem;">&#8593;&#8593;</span>
+            <span style="font-size:0.44rem;color:#888;">FRAGILE</span>
+            <div class="sl-barcode"></div>
+            <span style="font-size:0.44rem;color:#888;">00000000000</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="lightbox">
+  <button id="lbClose">&#x2715;</button>
+  <button class="lb-nav" id="lb-prev">&#9664;</button>
+  <div class="lb-inner">
+    <div id="lb-date"></div>
+    <div id="lbSlot"></div>
+    <div id="lb-title"></div>
+  </div>
+  <button class="lb-nav" id="lb-next">&#9654;</button>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
