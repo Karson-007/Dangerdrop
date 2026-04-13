@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DANGERDROP</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --accent:#4a6480;
+  --accent-dark:#35506a;
+  --sidebar:#28333f;
+  --sidebar-art:#1a2c2c;
+  --bg:#e9eaec;
+  --border:#c2c8d0;
+  --text:#252c35;
+  --text-sub:#5a6878;
+  --sw:220px;
+  --col:640px;
+  --tr:0.35s cubic-bezier(0.4,0,0.2,1);
+}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh}
+
+/* ── Sidebar ── */
+#sidebar{width:var(--sw);min-height:100vh;background:var(--sidebar);display:flex;flex-direction:column;position:fixed;left:0;top:0;z-index:100;transition:transform var(--tr)}
+body.closed #sidebar{transform:translateX(calc(-1 * var(--sw)))}
+.sidebar-brand{padding:24px 20px 18px;color:white;font-family:'Space Mono',monospace;font-size:0.95rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.1);line-height:1.3}
+.sidebar-brand span{display:block;font-size:0.62rem;font-weight:400;letter-spacing:0.22em;color:rgba(255,255,255,0.4);margin-top:3px}
+.nav-links{display:flex;flex-direction:column;flex:1;padding-top:10px}
+.nav-link{color:rgba(255,255,255,0.55);font-family:'Space Mono',monospace;font-size:0.78rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;padding:14px 20px;cursor:pointer;position:relative;transition:color 0.18s,background 0.18s;user-select:none}
+.nav-link::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:rgba(255,255,255,0.55);transform:scaleY(0);transition:transform 0.2s}
+.nav-link:hover{color:white}
+.nav-link:hover::before{transform:scaleY(1)}
+.nav-link.active{color:white;background:rgba(255,255,255,0.07)}
+.nav-link.active::before{transform:scaleY(1)}
+.sidebar-art{width:100%;height:140px;background:var(--sidebar-art);overflow:hidden;flex-shrink:0}
+.sidebar-art img{width:100%;height:100%;object-fit:cover}
+
+/* ── Toggle ── */
+#toggleBtn{position:fixed;top:20px;left:calc(var(--sw) - 30px);background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.4);font-size:0.8rem;padding:4px 6px;z-index:999;transition:left var(--tr),color var(--tr);line-height:1}
+body.closed #toggleBtn{left:6px;color:var(--text-sub)}
+
+/* ── Main ── */
+#main{margin-left:var(--sw);min-height:100vh;display:flex;flex-direction:column;align-items:center;transition:margin-left var(--tr)}
+body.closed #main{margin-left:0}
+
+/* ── Header ── */
+.site-header{width:100%;max-width:calc(var(--col) + 80px);padding:52px 40px 0;display:flex;flex-direction:column;gap:28px}
+.header-top{display:flex;align-items:center;gap:18px}
+.logo-block{flex-shrink:0;width:100px;height:100px;overflow:hidden}
+.logo-block img{width:100%;height:100%;object-fit:contain}
+.site-title{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;letter-spacing:0.15em;color:var(--text);line-height:1}
+.site-tagline{font-family:'Space Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;color:var(--text-sub);margin-top:5px;text-transform:uppercase}
+.header-banner{width:70%;height:100px;overflow:hidden;margin-right:auto}
+.header-banner img{width:100%;height:100%;object-fit:cover}
+.header-divider{border:none;border-top:1px solid var(--border);width:100%;max-width:calc(var(--col) + 80px);margin-top:24px}
+
+/* ── img-slot (placeholder、画像がない場所) ── */
+.img-slot{background:#e4e6ea;border:1.5px dashed #b0b8c4;display:flex;align-items:center;justify-content:center;color:#a0aab4;font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;width:100%;height:100%}
+
+/* ── Pages ── */
+.page{display:none;width:100%;max-width:calc(var(--col) + 80px);padding:52px 40px 80px}
+.page.active{display:block}
+
+/* ── About ── */
+.about-wrap{display:grid;grid-template-columns:1fr 170px;gap:52px;align-items:start}
+.about-label{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.22em;color:var(--text-sub);text-transform:uppercase;margin-bottom:5px}
+.about-name{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:0.1em;color:var(--text);line-height:1.1;margin-bottom:2px}
+.about-sub{font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--text-sub);letter-spacing:0.08em;margin-bottom:30px}
+.about-body{font-size:0.875rem;line-height:2;color:#334050}
+.about-body p{margin-bottom:18px}
+.about-body a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+.about-body a:hover{color:var(--accent-dark)}
+.about-img-wrap{width:100%;aspect-ratio:3/4;position:sticky;top:44px;overflow:hidden}
+.about-img-wrap img{width:100%;height:100%;object-fit:cover}
+.about-copyright{margin-top:36px;padding-top:18px;border-top:1px solid var(--border);font-size:0.67rem;color:#9aabb8;line-height:1.85;font-family:'Space Mono',monospace;letter-spacing:0.02em}
+
+/* ── Gallery (list / log) ── */
+.gallery-meta{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px}
+.gallery-heading{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.22em;color:var(--text-sub);text-transform:uppercase}
+.gallery-count{font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--border)}
+.gallery-entry{border-top:1px solid var(--border);padding:20px 0 28px}
+.gallery-entry:last-child{border-bottom:1px solid var(--border)}
+.entry-date{font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--text-sub);letter-spacing:0.1em;text-align:right;margin-bottom:10px}
+.entry-img{position:relative;padding-bottom:46%;overflow:hidden;cursor:pointer}
+.entry-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 0.2s}
+.entry-img:hover img{opacity:0.82}
+.entry-title{font-family:'Space Mono',monospace;font-size:0.82rem;color:var(--text);margin-top:10px;letter-spacing:0.05em}
+
+/* ── Links ── */
+.links-block{margin-bottom:32px}
+.links-heading{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.22em;color:var(--text-sub);text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.links-group{display:flex;flex-wrap:wrap;gap:8px 22px}
+.link-item{color:var(--accent);font-size:0.875rem;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;cursor:pointer;transition:color 0.15s}
+.link-item:hover{color:var(--accent-dark)}
+.links-inactive .link-item{opacity:0.35;color:var(--text-sub);text-decoration:none}
+.links-notice{font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--text-sub);font-style:italic;letter-spacing:0.05em;margin-bottom:12px}
+.links-warning{font-size:0.8rem;color:#4a5668;line-height:1.8;max-width:500px}
+
+/* ── Shipping Label ── */
+.ship-label-section{margin-top:52px}
+.ship-label-heading{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.22em;color:var(--text-sub);text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.ship-label{border:1.5px solid #2a2a2a;width:310px;font-family:'Space Mono',monospace;font-size:0.58rem}
+.sl-top{display:grid;grid-template-columns:62px 1fr;border-bottom:1.5px solid #2a2a2a}
+.sl-logo{border-right:1.5px solid #2a2a2a;display:flex;align-items:center;justify-content:center;padding:10px;font-size:1.5rem;font-weight:700;line-height:1.1}
+.sl-addr{padding:8px 10px}
+.sl-priority{font-weight:700;font-size:0.68rem;margin-top:4px;letter-spacing:0.08em}
+.sl-from{padding:6px 10px;border-bottom:1.5px solid #2a2a2a}
+.sl-fields{display:grid;grid-template-columns:1fr 1fr}
+.sl-field{padding:6px 10px;border-bottom:1.5px solid #2a2a2a;min-height:30px}
+.sl-field:nth-child(odd){border-right:1.5px solid #2a2a2a}
+.sl-lbl{font-size:0.46rem;color:#666;letter-spacing:0.1em;text-transform:uppercase}
+.sl-bar{background:repeating-linear-gradient(90deg,#000 0,#000 1.5px,#fff 1.5px,#fff 3px);height:15px;width:106px;margin-top:3px}
+.sl-foot{display:flex;align-items:center;gap:8px;padding:7px 10px}
+.sl-barcode{flex:1;height:20px;background:repeating-linear-gradient(90deg,#000 0,#000 2px,#fff 2px,#fff 4px);opacity:0.75}
+
+/* ── Lightbox ── */
+#lightbox{display:none;position:fixed;inset:0;background:rgba(18,22,28,0.96);z-index:500;align-items:center;justify-content:center}
+#lightbox.open{display:flex}
+.lb-inner{position:relative}
+#lb-date{position:absolute;top:-26px;right:0;color:rgba(255,255,255,0.38);font-family:'Space Mono',monospace;font-size:0.72rem}
+#lb-title{position:absolute;bottom:-24px;left:0;color:rgba(255,255,255,0.75);font-family:'Space Mono',monospace;font-size:0.82rem;font-weight:700}
+#lbSlot{width:min(860px,85vw);height:min(560px,80vh);background:#0e1216;border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;overflow:hidden}
+#lbSlot img{width:100%;height:100%;object-fit:contain}
+#lbClose{position:fixed;top:20px;right:24px;color:rgba(255,255,255,0.4);font-size:1.5rem;cursor:pointer;background:none;border:none;line-height:1;z-index:501;transition:color 0.15s}
+#lbClose:hover{color:white}
+.lb-nav{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.05);border:none;color:rgba(255,255,255,0.4);font-size:1.2rem;cursor:pointer;padding:22px 12px;z-index:501;transition:background 0.15s,color 0.15s}
+.lb-nav:hover{background:rgba(255,255,255,0.12);color:white}
+#lb-prev{left:0}
+#lb-next{right:0}
+</style>
+</head>
+<body>
+
+<button id="toggleBtn">&#9664;</button>
+
+<div id="app">
+  <aside id="sidebar">
+    <div class="sidebar-brand">
+      Dangerdrop
+      <span>ARQISAT</span>
+    </div>
+    <nav class="nav-links">
+      <div class="nav-link active" data-page="about">About</div>
+      <div class="nav-link" data-page="gallery">Gallery</div>
+      <div class="nav-link" data-page="links">Links</div>
+    </nav>
+    <div class="sidebar-art">
+      <!-- sidebar装饰图 → 替换 sidebar-art.jpg -->
+      <img src="sidebar-art.jpg" alt="">
+    </div>
+  </aside>
+
+  <main id="main">
+    <header class="site-header">
+      <div class="header-top">
+        <div class="logo-block">
+          <!-- logo → 替换 logo.png -->
+          <img src="logo.png" alt="DANGERDROP">
+        </div>
+        <div>
+          <div class="site-title">Dangerdrop</div>
+          <div class="site-tagline">Character design · Environment · KV</div>
+        </div>
+      </div>
+      <div class="header-banner">
+        <!-- 横幅banner → 替换 banner.jpg -->
+        <img src="banner.jpg" alt="">
+      </div>
+    </header>
+    <hr class="header-divider">
+
+    <!-- About -->
+    <section class="page active" id="page-about">
+      <div class="about-wrap">
+        <div>
+          <div class="about-label">Illustrator</div>
+          <div class="about-name">ARQISAT</div>
+          <div class="about-sub">from DANGERDROP</div>
+          <div class="about-body">
+            <p>DANGERDROP は2014年より日本は長野県を拠点に活動するクリエイティブサークルです。<br>代表のイラストレータ ASTG は2021年から PN を ARQISAT へ変更</p>
+            <p><strong>近年の活動</strong><br>
+            ドールズフロントライン | <a href="https://x.com/GirlsFrontline/status/1181856887173599232">M200</a> / <a href="https://x.com/GirlsFrontline/status/1610941184880562177">MG338</a><br>
+            Fate / Grand Order | <a href="https://news.fate-go.jp/2020/imaginary_scramble_pu/">ネモ</a> / <a href="https://news.fate-go.jp/2023/christmas2023/">ネモ〔サンタ〕</a><br>
+            Wonder Festival | <a href="https://kaiyodo.co.jp/items/wonderfestival/wonda-chan4/">[ワンダちゃんNEXT DOOR プロジェクト] FILE:04 DANGERDROPVer.</a><br>など</p>
+            <p>CONTACT : <a href="/cdn-cgi/l/email-protection#eb8f8a858c8e998f99849bc582858d84ab8c868a8287c5888486"><span class="__cf_email__" data-cfemail="6004010e07051204120f104e090e060f20070d01090c4e030f0d">[email&#160;protected]</span></a><br>
+            ※イラスト制作のご依頼は 2027年 1月 以降に着手できるものだと助かります。<br>
+            ※現在は法人様のみご依頼をお受けしております。</p>
+          </div>
+          <div class="about-copyright">
+            Copyright 2007-2026 © dangerdrop. All rights reserved.<br>
+            DO NOT USE, REPRINT, UPLOAD ANY OF MY WORKS WITHOUT PERMISSION.<br>
+            Unauthorized duplication &amp; distribution is strictly prohibited.
+          </div>
+        </div>
+        <div class="about-img-wrap">
+          <!-- About右侧角色图 → 替换 about-chara.jpg -->
+          <img src="about-chara.jpg" alt="">
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="page" id="page-gallery">
+      <div class="gallery-meta">
+        <div class="gallery-heading">Works</div>
+        <div class="gallery-count" id="galleryCount"></div>
+      </div>
+      <div id="galleryItems"></div>
+    </section>
+
+    <!-- Links -->
+    <section class="page" id="page-links">
+      <div class="links-block">
+        <div class="links-heading">Active Platforms</div>
+        <div class="links-group">
+          <a class="link-item" href="https://dangerdrop.tumblr.com/" target="_blank">tumblr (home)</a>
+          <a class="link-item" href="https://bsky.app/profile/dangerdrop.bsky.social" target="_blank">Bluesky</a>
+          <a class="link-item" href="https://instagram.com/dangerdrop/" target="_blank">instagram</a>
+          <a class="link-item" href="http://www.pixiv.net/member.php?id=341407" target="_blank">pixiv</a>
+          <a class="link-item" href="https://dangerdrop.booth.pm/" target="_blank">BOOTH</a>
+          <a class="link-item" href="http://twitter.com/dangerdrop" target="_blank">twitter</a>
+          <a class="link-item" href="http://twitter.com/ARQISAT" target="_blank">twitter (sub)</a>
+          <a class="link-item" href="https://dangerdrop.fanbox.cc/" target="_blank">pixivFANBOX</a>
+          <a class="link-item" href="https://poipiku.com/yourID/" target="_blank">poipiku</a>
+        </div>
+      </div>
+      <div class="links-block">
+        <div class="links-notice">No new posts will be made</div>
+        <div class="links-group links-inactive">
+          <a class="link-item" href="https://www.threads.net/@dangerdrop" target="_blank">Threads</a>
+          <a class="link-item" href="https://pawoo.net/@yourname" target="_blank">Mastodon(Pawoo)</a>
+          <a class="link-item" href="https://www.tinami.com/creator/profile/yourID" target="_blank">Tinami</a>
+          <a class="link-item" href="https://www.artstation.com/yourname" target="_blank">ArtStation</a>
+          <a class="link-item" href="https://www.deviantart.com/yourname" target="_blank">DeviantArt</a>
+          <a class="link-item" href="https://seiga.nicovideo.jp/user/illust/yourID" target="_blank">Niconico Seiga</a>
+          <a class="link-item" href="https://www.flickr.com/photos/yourname" target="_blank">Flickr</a>
+          <a class="link-item" href="https://www.youtube.com/@yourname" target="_blank">YouTube</a>
+          <a class="link-item" href="https://soundcloud.com/yourname" target="_blank">soundcloud</a>
+        </div>
+      </div>
+      <div class="links-warning">
+        The above list is the platform I created my account on.<br>
+        If you see my name or posts on platforms other than this list, it is most likely a fake account or unauthorized reproduction.
+      </div>
+
+      <div class="ship-label-section">
+        <div class="ship-label-heading">Goods &amp; Merchandise</div>
+        <div class="ship-label">
+          <div class="sl-top">
+            <div class="sl-logo">LO<br>GO</div>
+            <div class="sl-addr">
+              <div style="font-size:0.44rem;color:#888;">TO:</div>
+              <div style="font-weight:700;">COMPANY NAME</div>
+              <div style="color:#555;">Address, City</div>
+              <div style="color:#555;">ZIP, State</div>
+              <div class="sl-priority">PRIORITY MAIL</div>
+            </div>
+          </div>
+          <div class="sl-from"><span style="color:#888;font-size:0.44rem;">FROM: </span><span style="font-weight:700;">COMPANY NAME</span><br><span style="color:#555;padding-left:34px;">Address, City, ZIP, State</span></div>
+          <div class="sl-fields">
+            <div class="sl-field"><div class="sl-lbl">ORDER NR: 000000/2020</div><div class="sl-bar"></div></div>
+            <div class="sl-field"><div class="sl-lbl">LOT NUMBER:</div></div>
+            <div class="sl-field"><div class="sl-lbl">ITEM NR: 000000/2020</div></div>
+            <div class="sl-field"><div class="sl-lbl">SHIP DATE:</div></div>
+            <div class="sl-field" style="grid-column:1/-1;border-bottom:none;"><div class="sl-lbl">WEIGHT:</div></div>
+          </div>
+          <div class="sl-foot">
+            <span style="font-size:0.9rem;">&#9854;</span>
+            <span style="font-size:1rem;">&#8593;&#8593;</span>
+            <span style="font-size:0.44rem;color:#888;">FRAGILE</span>
+            <div class="sl-barcode"></div>
+            <span style="font-size:0.44rem;color:#888;">00000000000</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="lightbox">
+  <button id="lbClose">&#x2715;</button>
+  <button class="lb-nav" id="lb-prev">&#9664;</button>
+  <div class="lb-inner">
+    <div id="lb-date"></div>
+    <div id="lbSlot"></div>
+    <div id="lb-title"></div>
+  </div>
+  <button class="lb-nav" id="lb-next">&#9654;</button>
+</div>
+
+<script>
+(function(){
+  var works = [
+    { date:'2016/1',  title:'Port',                                      img:'work-01.jpg' },
+    { date:'2016/3',  title:'U620',                                      img:'work-02.jpg' },
+    { date:'2016/5',  title:'Bayside',                                   img:'work-03.jpg' },
+    { date:'2017/2',  title:'994F',                                      img:'work-04.jpg' },
+    { date:'2017/8',  title:'Junttan PMX22 / Pile Driving Rig (Finland)',img:'work-05.jpg' }
+  ];
+
+  var container = document.getElementById('galleryItems');
+  document.getElementById('galleryCount').textContent = works.length + ' works';
+
+  works.forEach(function(w, i){
+    var entry = document.createElement('div');
+    entry.className = 'gallery-entry';
+    entry.innerHTML =
+      '<div class="entry-date">' + w.date + '</div>' +
+      '<div class="entry-img"><img src="' + w.img + '" alt="' + w.title + '"></div>' +
+      '<div class="entry-title">' + w.title + '</div>';
+    container.appendChild(entry);
+    entry.querySelector('.entry-img').addEventListener('click', function(){ openLB(i); });
+  });
+
+  var toggleBtn = document.getElementById('toggleBtn');
+  toggleBtn.addEventListener('click', function(){
+    var closed = document.body.classList.toggle('closed');
+    toggleBtn.innerHTML = closed ? '&#9654;' : '&#9664;';
+  });
+
+  var navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(function(link){
+    link.addEventListener('click', function(){
+      navLinks.forEach(function(l){ l.classList.remove('active'); });
+      document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+      link.classList.add('active');
+      var page = document.getElementById('page-' + link.dataset.page);
+      if(page) page.classList.add('active');
+    });
+  });
+
+  var cur = 0;
+  var lb  = document.getElementById('lightbox');
+
+  function openLB(i){ cur=i; updateLB(); lb.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeLB(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+  function updateLB(){
+    var w = works[cur];
+    document.getElementById('lb-date').textContent  = w.date;
+    document.getElementById('lb-title').textContent = w.title;
+    var slot = document.getElementById('lbSlot');
+    slot.innerHTML = '<img src="' + w.img + '" alt="' + w.title + '" style="max-width:100%;max-height:100%;object-fit:contain;">';
+  }
+
+  document.getElementById('lbClose').addEventListener('click', closeLB);
+  document.getElementById('lb-prev').addEventListener('click', function(){ cur=(cur-1+works.length)%works.length; updateLB(); });
+  document.getElementById('lb-next').addEventListener('click', function(){ cur=(cur+1)%works.length; updateLB(); });
+  lb.addEventListener('click', function(e){ if(e.target===lb) closeLB(); });
+  document.addEventListener('keydown', function(e){
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') closeLB();
+    if(e.key==='ArrowLeft'){  cur=(cur-1+works.length)%works.length; updateLB(); }
+    if(e.key==='ArrowRight'){ cur=(cur+1)%works.length; updateLB(); }
+  });
+})();
+</script>
+</body>
+</html>
